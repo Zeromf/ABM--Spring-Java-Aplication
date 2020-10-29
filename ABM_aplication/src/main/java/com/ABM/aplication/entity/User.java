@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -26,22 +29,31 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue (strategy= GenerationType.AUTO, generator="native")
 	@GenericGenerator (name="native",strategy="native")
-
-	@Column
 	private Long id;
+	 //El valor no puede ser null 
+			//y debe contener al menos un caracter que no sea espacio.
+	
+	@Size(min=5,max=8,message="Error mismo nombre")
+	@NotBlank
 	@Column
 	private String firstName;
 	@Column
+	@NotBlank
 	private String lastName;
 	@Column
+	@NotBlank
 	private String email;
 	@Column
+	@NotBlank
 	private String username;
 	@Column
+	@NotBlank
 	private String password;
 	@Transient
+	@NotBlank
 	private String confirmPassword;
 	
+	@Size(min=1)
 	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="user_roles",
 	
