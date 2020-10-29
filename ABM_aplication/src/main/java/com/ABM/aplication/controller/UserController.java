@@ -128,4 +128,21 @@ public class UserController {
 		}
 		
 		
+		@GetMapping("/deleteUser/{id}")
+		public String deleteUser(Model model, @PathVariable(name="id") Long id) {
+			
+			try {
+				userService.deleteUser(id);
+				
+			} catch (Exception e) {
+				
+				model.addAttribute("listErrorMessage",e.getMessage());
+				
+			}
+			
+			return "redirect:/userForm";
+			
+		}
+		
+		
 }
