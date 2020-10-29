@@ -50,6 +50,13 @@ public class User implements Serializable {
 	
 	private Set<Role>roles ;
 
+	
+	
+	public User() {
+		super();
+	
+	}
+
 	public User(Long id) {
 		super();
 		this.id = id;
@@ -191,6 +198,12 @@ public class User implements Serializable {
 		return true;
 	}
 
+	
+	
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
