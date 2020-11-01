@@ -72,6 +72,8 @@
 		</div>
 	</div>
 </div>
+<!-- Se agrega solo en modo de editar -->
+<div th:if="${editMode}" th:include="user-form/change-password.html" th:remove="tag"></div>
 <div th:include="user-form/confirm-delete-dialog.html" th:remove="tag"></div>
 </body>
 </html>

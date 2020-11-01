@@ -1,5 +1,6 @@
 package com.ABM.aplication.service;
 
+import com.ABM.aplication.dto.ChangePasswordForm;
 import com.ABM.aplication.entity.User;
 
 public interface UserService {
@@ -15,6 +16,8 @@ public interface UserService {
 	public User updateUser(User user)throws Exception;
 	
 	public User deleteUser(Long id)throws Exception;
+	
+	public User changePassword(ChangePasswordForm form) throws Exception;
 
 	
 } 

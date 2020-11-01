@@ -33,7 +33,7 @@ public class User implements Serializable {
 	 //El valor no puede ser null 
 			//y debe contener al menos un caracter que no sea espacio.
 	
-	@Size(min=5,max=8,message="Error mismo nombre")
+	@Size(min=4,max=10,message="Error debe contener entre 4 o 10 letras maximo")
 	@NotBlank
 	@Column
 	private String firstName;
