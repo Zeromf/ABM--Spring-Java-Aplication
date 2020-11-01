@@ -3,6 +3,10 @@ package com.ABM.aplication.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ABM.aplication.dto.ChangePasswordForm;
@@ -14,8 +18,9 @@ public class UserServicelmpl implements UserService{
 
 	@Autowired
 	UserRepository repository;
-	
-	
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+
 	
 	@Override
 	public Iterable <User> getAllUsers(){
@@ -53,6 +58,9 @@ public class UserServicelmpl implements UserService{
 
 		if (checkusernameAvailable(user) && cheackPasswordValid(user)) {
 			user=repository.save(user);
+			String encodePassword=bCryptPasswordEncoder.encode(user.getPassword());
+			user.setPassword(encodePassword);
+			
 		}
 
 		return user;
@@ -86,6 +94,7 @@ public class UserServicelmpl implements UserService{
 		to.setRoles(from.getRoles());
 		}
 	@Override
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	public User deleteUser(Long id) throws Exception {
 		
 		User user= getUserById(id);
@@ -99,7 +108,7 @@ public class UserServicelmpl implements UserService{
 		
 		User user= getUserById(form.getId());
 		
-		if(!user.getPassword().equals(form.getCurrentPassword())) {
+		if(!isLoggedUserADMIN() && !user.getPassword().equals(form.getCurrentPassword())) {
 			throw new Exception("Current Password invalido");
 		}else {
 		
@@ -112,10 +121,33 @@ public class UserServicelmpl implements UserService{
 			throw new Exception("Nuevo Password y Current Password no coinciden");
 
 		}
-		
-		user.setPassword(form.getNewPassword());
+		String encodePassword=bCryptPasswordEncoder.encode(form.getNewPassword());
+		user.setPassword(encodePassword);
 		
 		return repository.save(user);
 		
 	}
+	
+	
+	
+	private boolean isLoggedUserADMIN() {
+		 return loggedUserHasRole("ROLE_ADMIN");
+	}
+	public boolean loggedUserHasRole(String role) {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserDetails loggedUser = null;
+		Object roles = null; 
+		if (principal instanceof UserDetails) {
+			loggedUser = (UserDetails) principal;
+		
+			roles = loggedUser.getAuthorities().stream()
+					.filter(x -> role.equals(x.getAuthority() ))      
+					.findFirst().orElse(null); //loggedUser = null;
+		}
+		return roles != null ?true :false;
+	}
+	
+	
+	
+	
 }

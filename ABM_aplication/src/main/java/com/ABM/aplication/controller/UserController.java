@@ -31,7 +31,7 @@ public class UserController {
 		RoleRepository roleRepository;
 		
 		
-		@GetMapping("/")
+		@GetMapping({"/","/login"})
 		public String index() {
 			return "index";
 
