@@ -7,4 +7,9 @@ import com.ABM.aplication.entity.Role;
 @Repository
 public interface RoleRepository extends CrudRepository<Role,Long>{
 
+	public Role findByName(String name);
+
+
+	
+	
 }

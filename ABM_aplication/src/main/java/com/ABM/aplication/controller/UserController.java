@@ -1,5 +1,7 @@
 package com.ABM.aplication.controller;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ABM.aplication.Exceptions.UsernameOrIdNotFound;
 import com.ABM.aplication.dto.ChangePasswordForm;
+import com.ABM.aplication.entity.Role;
 import com.ABM.aplication.entity.User;
 import com.ABM.aplication.repository.RoleRepository;
 import com.ABM.aplication.service.UserService;
@@ -37,6 +40,53 @@ public class UserController {
 			return "index";
 
 		}
+		
+		
+		@GetMapping("/signup")
+		public String signup(ModelMap modelo) {
+			Role userRole=roleRepository.findByName("USER");
+			List<Role>roles=Arrays.asList(userRole);
+			modelo.addAttribute("userForm", new User());
+			modelo.addAttribute("roles",roles);
+			modelo.addAttribute("signup",true);
+
+			return "user-form/user-signup";
+		}
+		
+		@PostMapping("/signup")
+		public String postSignup(@Valid @ModelAttribute("userForm")User user,BindingResult result,ModelMap modelo){   
+			Role userRole=roleRepository.findByName("USER");
+			List<Role>roles=Arrays.asList(userRole);
+			modelo.addAttribute("userForm", user);
+			modelo.addAttribute("roles",roles);
+			modelo.addAttribute("signup",true);
+			
+			
+			
+			if(result.hasErrors()) {
+
+				return "user-form/user-signup";
+				
+				}else {
+					try {
+						userService.createUser(user);
+					} catch (Exception e) {
+						modelo.addAttribute("formErrorMessage",e.getMessage());
+						return signup(modelo);
+
+						
+					}
+					
+					
+				}
+			return "index";
+			
+		}
+		
+		
+		
+		
+		
 		@GetMapping("/userForm")
 		public String userForm(Model modelo) {
 			modelo.addAttribute("userForm", new User());
