@@ -138,7 +138,7 @@ public class UserController {
 			return "redirect:/userForm";
 		}
 		
-		
+	
 		@GetMapping("/deleteUser/{id}")
 		public String deleteUser(Model model, @PathVariable(name="id") Long id) {
 			
