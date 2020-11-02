@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ABM.aplication.Exceptions.UsernameOrIdNotFound;
 import com.ABM.aplication.dto.ChangePasswordForm;
 import com.ABM.aplication.entity.User;
 import com.ABM.aplication.repository.UserRepository;
@@ -67,8 +68,8 @@ public class UserServicelmpl implements UserService{
 	}
 	
 	@Override
-	public User getUserById(Long id) throws Exception {
-		return repository.findById(id).orElseThrow(() -> new Exception("El usuario no existe"));
+	public User getUserById(Long id) throws UsernameOrIdNotFound {
+		return repository.findById(id).orElseThrow(() -> new UsernameOrIdNotFound("El Id del usuario no existe"));
 	}
 	@Override
 	public User updateUser(User fromUser) throws Exception { 
@@ -95,13 +96,13 @@ public class UserServicelmpl implements UserService{
 		}
 	@Override
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-	public User deleteUser(Long id) throws Exception {
+	public void deleteUser(Long id) throws UsernameOrIdNotFound {
 		
 		User user= getUserById(id);
 		
 		repository.delete(user);
 		
-		return null;
+		
 	}
 	@Override
 	public User changePassword(ChangePasswordForm form) throws Exception {
