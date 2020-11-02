@@ -18,9 +18,9 @@ public class UserServicelmpl implements UserService{
 
 	@Autowired
 	UserRepository repository;
+	
 	@Autowired
-	BCryptPasswordEncoder bCryptPasswordEncoder;
-
+	 BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Override
 	public Iterable <User> getAllUsers(){
@@ -57,10 +57,10 @@ public class UserServicelmpl implements UserService{
 	public User createUser(User user) throws Exception {
 
 		if (checkusernameAvailable(user) && cheackPasswordValid(user)) {
-			user=repository.save(user);
 			String encodePassword=bCryptPasswordEncoder.encode(user.getPassword());
 			user.setPassword(encodePassword);
 			
+			user=repository.save(user);
 		}
 
 		return user;
@@ -121,6 +121,7 @@ public class UserServicelmpl implements UserService{
 			throw new Exception("Nuevo Password y Current Password no coinciden");
 
 		}
+		
 		String encodePassword=bCryptPasswordEncoder.encode(form.getNewPassword());
 		user.setPassword(encodePassword);
 		
@@ -130,9 +131,6 @@ public class UserServicelmpl implements UserService{
 	
 	
 	
-	private boolean isLoggedUserADMIN() {
-		 return loggedUserHasRole("ROLE_ADMIN");
-	}
 	public boolean loggedUserHasRole(String role) {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		UserDetails loggedUser = null;
@@ -147,7 +145,7 @@ public class UserServicelmpl implements UserService{
 		return roles != null ?true :false;
 	}
 	
-	
-	
-	
+	public boolean isLoggedUserADMIN(){
+		 return loggedUserHasRole("ROLE_ADMIN");
+		}
 }

@@ -1,7 +1,5 @@
 <div th:with="disableFields=!${editMode} and ${#authorization.expression('hasRole(''ROLE_USER'')')}">
 
-
-
 <form class"form" role="form" autocomplete="off" th:object="${userForm}"  th:action="${editMode} ?@{/editUser} :@{/userForm}" method="post"   >
 
 <!--Es necesario para poder pasar la validacion del Model-->
@@ -38,7 +36,7 @@
 <div class="form-group row">
 	<label class="col-lg-3 col-form-label form-control-label">Usuario</label>
 	<div class="col-lg-9">
-		<input class="form-control" type="text" th:field="${userForm.username}" th:disabled="${disableFields}">
+		<input class="form-control" type="text" th:field="${userForm.username}" th:disabled="${disableFields}" >
 		<div class="alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name Error</div>
 	</div>
 	</div>
