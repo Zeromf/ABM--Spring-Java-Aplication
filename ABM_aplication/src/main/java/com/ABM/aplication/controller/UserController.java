@@ -44,10 +44,12 @@ public class UserController {
 		
 		@GetMapping("/signup")
 		public String signup(ModelMap modelo) {
-			Role userRole=roleRepository.findByName("USER");
-			List<Role>roles=Arrays.asList(userRole);
 			modelo.addAttribute("userForm", new User());
-			modelo.addAttribute("roles",roles);
+			modelo.addAttribute("roles",roleRepository.findAll());
+		//	Role userRole=roleRepository.findByName("USER");
+		//	List<Role>roles=Arrays.asList(userRole);
+		//	modelo.addAttribute("userForm", new User());
+		//	modelo.addAttribute("roles",roles);
 			modelo.addAttribute("signup",true);
 
 			return "user-form/user-signup";
@@ -55,37 +57,57 @@ public class UserController {
 		
 		@PostMapping("/signup")
 		public String postSignup(@Valid @ModelAttribute("userForm")User user,BindingResult result,ModelMap modelo){   
-			Role userRole=roleRepository.findByName("USER");
-			List<Role>roles=Arrays.asList(userRole);
-			modelo.addAttribute("userForm", user);
-			modelo.addAttribute("roles",roles);
-			modelo.addAttribute("signup",true);
 			
-			
-			
-			if(result.hasErrors()) {
+		//	modelo.addAttribute("roles",roleRepository.findAll());
+			//Role userRole=roleRepository.findByName("USER");
+			//List<Role>roles=Arrays.asList(userRole);
+		//modelo.addAttribute("userForm", user);
+	//		modelo.addAttribute("roles",roles);
+		//	modelo.addAttribute("signup",true);
+		
+	//		if(result.hasErrors()) {
 
-				return "user-form/user-signup";
+				//return "user-form/user-signup";
 				
+				//}else {
+					//try {
+						//userService.createUser(user);
+					//} catch (Exception e) {
+					//	modelo.addAttribute("formErrorMessage",e.getMessage());
+				//		return signup(modelo);
+
+						
+			//		}
+					
+					
+		//		}
+	//		return "index";
+			
+//		}
+			modelo.addAttribute("userForm", user);
+			modelo.addAttribute("roles",roleRepository.findAll());
+			modelo.addAttribute("signup",true);
+
+			if(result.hasErrors()) {
+				return "user-form/user-signup";
 				}else {
 					try {
-						userService.createUser(user);
+						userService.createUser(user);	
 					} catch (Exception e) {
 						modelo.addAttribute("formErrorMessage",e.getMessage());
-						return signup(modelo);
+						return "user-form/user-signup";
 
 						
 					}
 					
 					
 				}
-			return "index";
 			
+			
+			
+			return "index";
+		
 		}
-		
-		
-		
-		
 		
 		@GetMapping("/userForm")
 		public String userForm(Model modelo) {
@@ -227,7 +249,7 @@ public class UserController {
 			
 			
 			return ResponseEntity.ok("Success");
-			//
+
 			
 		}	
 }
