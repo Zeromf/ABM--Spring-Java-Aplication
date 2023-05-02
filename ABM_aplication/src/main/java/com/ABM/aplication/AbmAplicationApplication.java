@@ -8,6 +8,7 @@ public class AbmAplicationApplication {
 
 	public static void main(String[] args) {
 		
+		
 		SpringApplication.run(AbmAplicationApplication.class, args);
 	}
 
